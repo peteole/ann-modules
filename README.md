@@ -11,3 +11,9 @@ The PlugOut provides access to the output of a neural network and the PlugIn can
 This is an abstraction of a neural network. It is a child of PlugIn and PlugOut as it needs to recieve input and provide an output.  It has abstract methods to evaluate an input, a training example and to update its parameters accoarding to the last training examples.
 ### FullyConnectedNetwork
 An implementation of a neural network implementing backpropagation and gradient descent.
+### NetworkContainer
+A neural network which can include several neural networks. You can add networks to the container using the addNetwork-Method. Then use the makeNetworkChildOf-Method of the container to connect the networks in the container as you wish. When finished, use the makeOrder-Method to let the NetworkContainer evaluate in which order the updateOutput-Methods need to be called to evaluate an input.
+### ValueDefiner
+The training process generally conatains minimizing or maximizing a certain value which is computed by the output of a training example and maybe some parameters like the target output of the training example. ValueDefiners are an abstraction of those "Value Computers". They are Neural Networks you can add to your NetworkContainer at any place you wish just like any NeuralNetwork. 
+### ErrorDefiner
+This is an implementation of a ValueDefiner using the mean squared error method to compute the value. It needs the target values for a training example in order to do so, so the target value array is "connected" to the target value output of the network container at the specified ports in the constructor.
