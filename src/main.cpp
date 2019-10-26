@@ -29,7 +29,7 @@ int main() {
 	c.makeOrder();
 	c.updateOutput(input, new double[5] { 7, 1, 3, 1, 2 });
 	c.addDerivatives();
-	double h=1e-10;
+	double h=1e-7;
 	double oldV=c.value;
 	cout<<n->dEdB[1][1]<<endl;
 	n->b[1][1]+=h;
@@ -38,17 +38,17 @@ int main() {
 
 	double newV=c.value;
 	cout<<(newV-oldV)/h<<endl;
-	return 0;
+	//return 0;
 	for (int i = 0; i < 100000; i++) {
 		for (int k = 0; k < 50; k++) {
 			for (int j = 0; j < 5; j++) {
 				input[j] = (double) random() / (double) RAND_MAX;
 			}
-			c.updateOutput(input, new double[5] { 7, 1, 3, 1, 2 });
+			c.updateOutput(input, new double[5] { 0.7, 0.1, 0.3, 0.1, 0.2 });
 			c.addDerivatives();
 		}
 		c.printOutput();
-		c.updateParameters(-0.000000005);
+		c.updateParameters(-0.00005);
 	}
 	//c.updateOutput(input, new double[3] { 7, 1, 3 });
 	return 0;

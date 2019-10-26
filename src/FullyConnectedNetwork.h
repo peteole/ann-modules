@@ -7,7 +7,8 @@
 
 #ifndef FULLYCONNECTEDNETWORK_H_
 #define FULLYCONNECTEDNETWORK_H_
-
+#define _USE_MATH_DEFINES
+#include "math.h"
 #include "NeuralNetwork.h"
 //#include "NetworkContainer.h"
 
@@ -24,10 +25,12 @@ public:
 	void addDerivatives();
 	void updateParameters(double alpha);
 	double a(double x) {
-		return x;
+		//return x;
+		return 1/(1+pow(M_E,-x));
 	}
 	double as(double x) {
-		return 1;
+		double c=a(x);
+		return c*(1-c);
 	}
 	void initializeParameters(){
 		for(int i=0;i<numOfLayers-1;i++){
