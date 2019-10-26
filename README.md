@@ -1,7 +1,7 @@
 # ann-modules
 A modular system to create and train your own custom neural networks
 ## installation
-Just copy the repository to your local machine
+Just copy the src folder to your working directory.
 ## The classes used
 The idea is to create a set of components you can connect to each other as you wish.
 ### PlugOut, PlugIn
