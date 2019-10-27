@@ -14,23 +14,9 @@ using namespace std;
 
 class NeuralNetwork: public PlugOut, public PlugIn {
 public:
-	/*void makeChildOf(PlugOut *parent, int firstOutputToUse) {
-		input = new double*[inputs];
-		for (int i = 0; i < inputs; i++) {
-			input[i] = &(parent->output[firstOutputToUse + i]);
-			parent->dEdOut[i + firstOutputToUse] = &(dEdIn[i]);
-		}
-	}*/
 	NeuralNetwork(int inputs, int outputs) :
 			PlugOut(outputs), PlugIn(inputs) {
 
-	}
-	template<typename T> void toArray(T **toConvert, T * &target, int len) {
-		//T *toReturn = new T[len];
-		for (int i = 0; i < len; i++) {
-			target[i] = *toConvert[i];
-		}
-		//return toReturn;
 	}
 	virtual void updateOutput()=0;
 	virtual void addDerivatives()=0;

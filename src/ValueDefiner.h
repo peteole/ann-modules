@@ -15,7 +15,6 @@ using namespace std;
 
 class ValueDefiner: public NeuralNetwork {
 public:
-	//NetworkContainer *container;
 	ValueDefiner(int channels, NetworkContainer *container);
 	virtual double getValue() {
 		return 0;
@@ -39,6 +38,7 @@ public:
 		for (int i = 0; i < inputs; i++) {
 			dEdIn[i] = *(dEdOut[i]) + d[i];
 		}
+		delete[] d;
 	}
 private:
 	NetworkContainer *container;

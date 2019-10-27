@@ -17,15 +17,6 @@ NetworkContainer::NetworkContainer(int inputs, int outputs,
 		int evaluationParameters) :
 		evaluationParameters(new double[evaluationParameters]),numOfEvaluationParameters(evaluationParameters), in(inputs), out(
 				outputs), NeuralNetwork(inputs, outputs) {
-	//PlugOut a(inputs);
-	//this->in = a;
-	//this->evaluationParameters=new double[evaluationParameters];
-	//PlugIn b(outputs);
-	//this->out = b;
-	//this->totalInput = new double[inputs];
-	// TODO Auto-generated constructor stub
-	//in(inputs);
-	//out(outputs);
 }
 
 NetworkContainer::~NetworkContainer() {
@@ -57,11 +48,13 @@ void NetworkContainer::addDerivatives() {
 	}
 }
 void NetworkContainer::makeNetworkChildOf(PlugIn *child, PlugOut *parent,
-		int firstPortToUse) {
-	input = new double*[inputs];
-	for (int i = 0; i < child->inputs; i++) {
-		child->input[i] = &(parent->output[firstPortToUse + i]);
-		parent->dEdOut[i + firstPortToUse] = &(child->dEdIn[i]);
+		int firstParentPortToUse,int amountOfPortsToUse, int firstChildPortToUse) {
+	if(amountOfPortsToUse==-1){
+		amountOfPortsToUse=child->inputs;
+	}
+	for (int i = 0; i < amountOfPortsToUse; i++) {
+		child->input[i+firstChildPortToUse] = &(parent->output[firstParentPortToUse + i]);
+		parent->dEdOut[i + firstParentPortToUse] = &(child->dEdIn[i+firstChildPortToUse]);
 	}
 	if (parent != &in && child != &out) {
 		NeuralNetwork *parentNetwork = static_cast<NeuralNetwork*>(parent);

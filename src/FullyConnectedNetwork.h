@@ -23,12 +23,14 @@ public:
 	~FullyConnectedNetwork() {
 	}
 	void addDerivatives();
+	void printWeights();
 	void updateParameters(double alpha);
 	double a(double x) {
 		//return x;
 		return 1/(1+pow(M_E,-x));
 	}
 	double as(double x) {
+		//return 1;
 		double c=a(x);
 		return c*(1-c);
 	}
@@ -36,7 +38,7 @@ public:
 		for(int i=0;i<numOfLayers-1;i++){
 			for(int j=0;j<neuronsInLayer[i+1];j++){
 				for(int k=0;k<neuronsInLayer[i];k++){
-					w[i][j][k]=1;
+					w[i][j][k]=0.1*(double) random() / (double) RAND_MAX-0.05;
 				}
 			}
 		}
