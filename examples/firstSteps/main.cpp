@@ -52,22 +52,13 @@ int main() {
 	container.makeOrder();
 
 	//compute output for an arbitrary input
-	container.updateOutput(new double[10], new double[4] { 1, 4, 2, 3 });
+	container.updateOutput(new double[10]{3,1,5,1,3,-1,2,5,0,3}, new double[3] { 1, 4, 2 });
 	container.printOutput();
 
 	//compute error derivatives
 	container.addDerivatives();
-	cout << network1->dEdB[1][1] << endl;
-
-	//compute derivative numerically
-	double h = 1e-7;//small change
-	double oldV = container.value;
-	network1->b[1][1] += h;//change parameter by h
-
-	//compute new error value
-	container.value = 0;
-	container.updateOutput(new double[10], new double[4] { 1, 4, 2, 3 });
-	double newV = container.value;
-	cout << (newV - oldV) / h << endl;//print numerical derivative
+	
+	//update all parameters
+	container.updateParameters(-0.01);
 	return 0;
 }
