@@ -19,21 +19,21 @@ The steps are the following:
 NetworkContainer container(10, 3, 3);
 ```
 ## create the networks
-```
+```cpp
 FullyConnectedNetwork *network1 = new FullyConnectedNetwork(new int[3] { 5, 4, 2 }, 3);
 FullyConnectedNetwork *network2 = new FullyConnectedNetwork(new int[3] { 5, 3, 2 }, 3);
 FullyConnectedNetwork *network3 = new FullyConnectedNetwork(new int[2] { 4, 3 }, 2);
 ValueDefiner *errorDef = new ErrorDefiner(3, &container, 0);
 ```
 ## add the networks to the container
-```
+```cpp
 container.addNeuralNetwork(network1);
 container.addNeuralNetwork(network2);
 container.addNeuralNetwork(network3);
 container.addNeuralNetwork(errorDef);
 ```
 ## connect the networks to each other
-```
+```cpp
 container.makeNetworkChildOf(network1, &(container.in), 0);
 container.makeNetworkChildOf(network2, &(container.in), 5);
 container.makeNetworkChildOf(network3, network1, 0, 2, 0);
@@ -42,19 +42,19 @@ container.makeNetworkChildOf(errorDef, network3, 0);
 container.makeNetworkChildOf(&(container.out), errorDef);
 ```
 ## let the container determine in which order it has to let the networks evaluate their inputs
-```
+```cpp
 container.makeOrder();
 ```
 ## compute and print an output and error value for a given training example(input, target output)
-```
+```cpp
 container.updateOutput(new double[10]{1,4,-2,3,5,2,8,2,4,1}, new double[3] { 1, 4, 2 });
 container.printOutput();
 ```
 ## compute the parameter derivatives for the last training example
-```
+```cpp
 container.addDerivatives();
 ```
 ## change parameters by -0.01 times the error value derivatives and reset error value derivatives
-```
+```cpp
 container.updateParameters(-0.01);
 ```
