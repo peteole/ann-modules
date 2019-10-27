@@ -58,8 +58,8 @@ int main() {
 			for (int j = 0; j < 10; j++) {
 				input[j] = 1 * (double) random() / (double) RAND_MAX;
 			}
-			for(int i=0;i<3;i++){
-				target[i]=(input[3*i]+input[3*i+1]+input[3*i+2])/3;
+			for(int j=0;j<3;j++){
+				target[j]=(input[3*j]+input[3*j+1]+input[3*j+2])/3;
 			}
 			container.updateOutput(input, target);
 			container.addDerivatives();
