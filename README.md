@@ -12,7 +12,7 @@ This is an abstraction of a neural network. It is a child of PlugIn and PlugOut 
 ### FullyConnectedNetwork
 An implementation of a neural network implementing backpropagation.
 ### NetworkContainer
-A neural network which can include several neural networks. You can add networks to the container using the addNetwork-Method. Then use the makeNetworkChildOf-Method of the container to connect the networks in the container as you wish. When finished, use the makeOrder-Method to let the NetworkContainer evaluate in which order the updateOutput-Methods need to be called to evaluate an input. For more information see https://github.com/peteole/ann-modules/tree/updated-network-connection-and-added-examples/examples/firstSteps
+A neural network which can include several neural networks. You can add networks to the container using the addNetwork-Method. Then use the makeNetworkChildOf-Method of the container to connect the networks in the container as you wish. When finished, use the makeOrder-Method to let the NetworkContainer evaluate in which order the updateOutput-Methods need to be called to evaluate an input. For more information see https://github.com/peteole/ann-modules/tree/master/examples/firstSteps
 ### ValueDefiner
 The training process generally contains minimizing or maximizing a certain value which is computed by the output of a training example and maybe some parameters like the target output of the training example. ValueDefiners are an abstraction of those "Value Computers". They are Neural Networks you can add to your NetworkContainer at any place you wish just like any NeuralNetwork. 
 ### ErrorDefiner
