@@ -45,9 +45,9 @@ container.makeNetworkChildOf(&(container.out), errorDef);
 ```
 container.makeOrder();
 ```
-## compute and print an output and error value with target values
+## compute and print an output and error value for a given training example(input, target output)
 ```
-container.updateOutput(new double[10], new double[3] { 1, 4, 2 });
+container.updateOutput(new double[10]{1,4,-2,3,5,2,8,2,4,1}, new double[3] { 1, 4, 2 });
 container.printOutput();
 ```
 ## compute the parameter derivatives for the last training example
