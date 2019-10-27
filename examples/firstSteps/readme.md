@@ -1,5 +1,5 @@
 # Example of a basic neural network being created
-This is the peaces of code needed to create a basic connection of neural networks. The network shall be the following:
+This is the pieces of code needed to create a basic connection of neural networks. The network shall be the following:
 ```
 
 |-------------- 0-- |----------\ 
