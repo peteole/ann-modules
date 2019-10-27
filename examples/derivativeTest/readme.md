@@ -1,0 +1,2 @@
+# Test of the derivative computation method
+I'm gonna use the same network as in the first steps example. After initialization, the plan is to compute the error for any training example, pick any parameter, alter it a tiny bit and compute how much the error changes after the change per change of the parameter. This value should be identical with the derivative conputed by the addDerivative-method.

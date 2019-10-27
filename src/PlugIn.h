@@ -14,7 +14,6 @@ class PlugIn {
 public:
 	PlugIn(int inputs):dEdIn(new double[inputs]){
 		this->inputs=inputs;
-		//this->dEdIn=new double[inputs];
 		this->input=new double*[inputs];
 	}
 	double* getInput(){

@@ -17,7 +17,6 @@ public:
 	}
 	PlugOut(int outputs=2):output(new double[outputs]){
 		this->outputs=outputs;
-		//this->output=new double[outputs];
 		this->dEdOut=new double*[outputs];
 	}
 	double* const output;

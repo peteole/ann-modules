@@ -54,6 +54,25 @@ FullyConnectedNetwork::FullyConnectedNetwork(
 	}
 
 }
+void FullyConnectedNetwork::printWeights(){
+	cout<<"weights:"<<endl;
+	for(int i=0;i<numOfLayers-1;i++){
+		for(int j=0;j<neuronsInLayer[i+1];j++){
+			for(int k=0;k<neuronsInLayer[i];k++){
+				cout<<w[i][j][k]<<" ";
+			}
+			cout<<"|";
+		}
+		cout<<endl;
+	}
+	cout<<"biases:"<<endl;
+	for(int i=0;i<numOfLayers;i++){
+		for(int j=0;j<neuronsInLayer[i];j++){
+			cout<<b[i][j]<<" ";
+		}
+		cout<<endl;
+	}
+}
 void FullyConnectedNetwork::updateOutput() {
 	double *output = new double[neuronsInLayer[0]];
 	net[0] = getInput();
@@ -71,6 +90,7 @@ void FullyConnectedNetwork::updateOutput() {
 			}
 			net[i][j] = netValue;
 		}
+		delete[] output;
 		output = new double[neuronsInLayer[i]];
 		for (int j = 0; j < neuronsInLayer[i]; j++) {
 			output[j] = a(net[i][j]);
@@ -79,6 +99,7 @@ void FullyConnectedNetwork::updateOutput() {
 	for (int i = 0; i < neuronsInLayer[numOfLayers - 1]; i++) {
 		this->output[i] = output[i];
 	}
+	delete [] output;
 }
 void FullyConnectedNetwork::updateParameters(double alpha) {
 	if(!isOriginal){
@@ -121,11 +142,12 @@ void FullyConnectedNetwork::addDerivatives() {
 			newdEdNet[j] = as(net[i][j]) * dEdOut;
 			dEdB[i][j] += newdEdNet[j];
 		}
+		delete[] dEdNet;
 		dEdNet = newdEdNet;
 	}
 	for (int i = 0; i < inputs; i++) {
 		dEdIn[i] = dEdNet[i];
 	}
-	//dEdIn = dEdNet;
+	delete[] dEdNet;
 }
 } /* namespace std */
