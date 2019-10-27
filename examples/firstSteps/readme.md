@@ -50,3 +50,11 @@ container.makeOrder();
 container.updateOutput(new double[10], new double[3] { 1, 4, 2 });
 container.printOutput();
 ```
+## compute the parameter derivatives for the last training example
+```
+container.addDerivatives();
+```
+## change parameters by -0.01 times the error value derivatives and reset error value derivatives
+```
+container.updateParameters(-0.01);
+```
