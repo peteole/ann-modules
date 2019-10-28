@@ -75,6 +75,7 @@ void FullyConnectedNetwork::printWeights(){
 }
 void FullyConnectedNetwork::updateOutput() {
 	double *output = new double[neuronsInLayer[0]];
+	delete net[0];
 	net[0] = getInput();
 	for (int i = 0; i < neuronsInLayer[0]; i++) {
 		output[i] = a(net[0][i]);
