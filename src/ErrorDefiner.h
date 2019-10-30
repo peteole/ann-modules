@@ -16,6 +16,7 @@ public:
 	ErrorDefiner(int channels, NetworkContainer *container,int firstChannelToUse) :
 			ValueDefiner(channels, container) {
 		this->targetValues = &(container->evaluationParameters[firstChannelToUse]);
+		firstChannelUsed=firstChannelToUse;
 	}
 	ErrorDefiner(int channels, double *weights, NetworkContainer *container,int firstChannelToUse) :
 			ValueDefiner(channels, container) {
@@ -38,6 +39,11 @@ public:
 	}
 	double *targetValues;
 	double *weights = 0;
+	NeuralNetwork* clone(){
+		return new ErrorDefiner(inputs,container,firstChannelUsed);
+	}
+private:
+	int firstChannelUsed;
 };
 
 } /* namespace std */
