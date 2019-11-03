@@ -35,4 +35,4 @@ This is business as usual:
 ```cpp
 container.updateParameters(-0.001);
 ```
-Of course you can specify any training method you wish using.
+Of course you can specify any training method you wish: https://github.com/peteole/ann-modules/tree/master/examples/costumTrainingMethod
