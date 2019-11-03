@@ -5,31 +5,25 @@
  *      Author: olep
  */
 
-#ifndef NETWORKCONTAINER_H_
-#define NETWORKCONTAINER_H_
+#ifndef NETWORKTYPES_NETWORKCONTAINER_H_
+#define NETWORKTYPES_NETWORKCONTAINER_H_
 
 #include "list"
 #include <iostream>
-#include "NeuralNetwork.h"
-//#include "ErrorDefiner.h"
-//#include "ValueDefiner.h"
-//class ValueDefiner;
 #include <map>
+
+#include "NeuralNetwork.h"
 
 using namespace std;
 
 class NetworkContainer: public NeuralNetwork {
 public:
 	NetworkContainer(int inputs, int outputs, int evaluationParameters ,void (*construct)(NetworkContainer &toConstruct));
+	NetworkContainer(int inputs, int outputs, int evaluationParameters );
 	void (*construct)(NetworkContainer &toConstruct);
-	~NetworkContainer();
 	PlugOut in;
 	PlugIn out;
 	double value = 0;
-	unsigned char* memory;
-	void getMemory(int bytes){
-		this->memory= new unsigned char[bytes];
-	}
 	void addNeuralNetwork(NeuralNetwork *toAdd);
 	void makeNetworkChildOf(PlugIn *child, PlugOut *parent,
 			int firstParentPortToUse = 0, int amountOfPortsToUse = -1,
@@ -59,9 +53,26 @@ public:
 			networks[i]->copyParameters(toUse->networks[i]);
 		}
 	}
+	void addDerivatives(NeuralNetwork *const toCopy) override{
+		NetworkContainer* toUse=dynamic_cast<NetworkContainer*>(toCopy);
+		if(!toUse){
+			return;
+		}
+		for(int i=0;i<numOfNetworks;i++){
+			networks[i]->addDerivatives(toUse->networks[i]);
+		}
+	}
 	NeuralNetwork *clone()override{
 		return new NetworkContainer(inputs, outputs, numOfEvaluationParameters,construct);
 	}
+	~NetworkContainer(){
+		for(int i=0;i<numOfNetworks;i++){
+			delete networks[i];
+		}
+		delete networks;
+	}
+	void updateParameters(void (*updateFunction)(double &derivative,double &oldValue, char* parameters))override;
+	void createBufferStorage(int numOfBytes)override;
 private:
 	struct commitment {
 		PlugOut *parent;
@@ -116,4 +127,4 @@ private:
 
 /* namespace std */
 
-#endif /* NETWORKCONTAINER_H_ */
+#endif /* NETWORKTYPES_NETWORKCONTAINER_H_ */

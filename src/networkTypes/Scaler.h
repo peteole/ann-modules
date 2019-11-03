@@ -5,8 +5,8 @@
  *      Author: olep
  */
 
-#ifndef SCALER_H_
-#define SCALER_H_
+#ifndef NETWORKTYPES_SCALER_H_
+#define NETWORKTYPES_SCALER_H_
 
 #include "NeuralNetwork.h"
 
@@ -39,4 +39,4 @@ public:
 
 } /* namespace std */
 
-#endif /* SCALER_H_ */
+#endif /* NETWORKTYPES_SCALER_H_ */

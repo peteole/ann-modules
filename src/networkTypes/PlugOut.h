@@ -5,8 +5,8 @@
  *      Author: olep
  */
 
-#ifndef PLUGOUT_H_
-#define PLUGOUT_H_
+#ifndef NETWORKTYPES_PLUGOUT_H_
+#define NETWORKTYPES_PLUGOUT_H_
 
 namespace std {
 
@@ -30,9 +30,12 @@ public:
 
 	int outputs;
 	double** dEdOut;
-
+	~PlugOut(){
+		delete output;
+		delete dEdOut;
+	}
 };
 
 } /* namespace std */
 
-#endif /* PLUGOUT_H_ */
+#endif /* NETWORKTYPES_PLUGOUT_H_ */

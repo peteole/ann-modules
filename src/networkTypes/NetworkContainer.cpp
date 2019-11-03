@@ -6,24 +6,30 @@
  */
 
 #include "NetworkContainer.h"
-#include "NeuralNetwork.h"
-#include "PlugOut.h"
+
 #include <exception>
 #include <algorithm>
 #include <iostream>
+
+//#include "NeuralNetwork.h"
+//#include "PlugOut.h"
 using namespace std;
 
 NetworkContainer::NetworkContainer(int inputs, int outputs,
-		int evaluationParameters,void (*construct)(NetworkContainer &toConstruct)) :
-		evaluationParameters(new double[evaluationParameters]),numOfEvaluationParameters(evaluationParameters), in(inputs), out(
-				outputs), NeuralNetwork(inputs, outputs) {
-	this->construct=construct;
+		int evaluationParameters,
+		void (*construct)(NetworkContainer &toConstruct)) :
+		evaluationParameters(new double[evaluationParameters]), numOfEvaluationParameters(
+				evaluationParameters), in(inputs), out(outputs), NeuralNetwork(
+				inputs, outputs) {
+	this->construct = construct;
 	construct(*this);
 	makeOrder();
 }
-
-NetworkContainer::~NetworkContainer() {
-	// TODO Auto-generated destructor stub
+NetworkContainer::NetworkContainer(int inputs, int outputs,
+		int evaluationParameters) :
+		evaluationParameters(new double[evaluationParameters]), numOfEvaluationParameters(
+				evaluationParameters), in(inputs), out(outputs), NeuralNetwork(
+				inputs, outputs) {
 }
 void NetworkContainer::updateOutput() {
 	double *target = this->in.output;
@@ -34,12 +40,13 @@ void NetworkContainer::updateOutput() {
 		networks[i]->updateOutput();
 	}
 }
-void NetworkContainer::updateOutput(double *input, double *evaluationParameters){
-	for(int i=0;i<inputs;i++){
-		this->in.output[i]=input[i];
+void NetworkContainer::updateOutput(double *input,
+		double *evaluationParameters) {
+	for (int i = 0; i < inputs; i++) {
+		this->in.output[i] = input[i];
 	}
-	for(int i=0;i<numOfEvaluationParameters;i++){
-		this->evaluationParameters[i]=evaluationParameters[i];
+	for (int i = 0; i < numOfEvaluationParameters; i++) {
+		this->evaluationParameters[i] = evaluationParameters[i];
 	}
 	for (int i = 0; i < numOfNetworks; i++) {
 		networks[i]->updateOutput();
@@ -50,20 +57,23 @@ void NetworkContainer::addDerivatives() {
 		networks[i]->addDerivatives();
 	}
 }
-void NetworkContainer::applyCommitment(commitment toApply){
-	if(toApply.parentID==-1){
+void NetworkContainer::applyCommitment(commitment toApply) {
+	if (toApply.parentID == -1) {
 		return;
 	}
 
 }
 void NetworkContainer::makeNetworkChildOf(PlugIn *child, PlugOut *parent,
-		int firstParentPortToUse,int amountOfPortsToUse, int firstChildPortToUse) {
-	if(amountOfPortsToUse==-1){
-		amountOfPortsToUse=child->inputs;
+		int firstParentPortToUse, int amountOfPortsToUse,
+		int firstChildPortToUse) {
+	if (amountOfPortsToUse == -1) {
+		amountOfPortsToUse = child->inputs;
 	}
 	for (int i = 0; i < amountOfPortsToUse; i++) {
-		child->input[i+firstChildPortToUse] = &(parent->output[firstParentPortToUse + i]);
-		parent->dEdOut[i + firstParentPortToUse] = &(child->dEdIn[i+firstChildPortToUse]);
+		child->input[i + firstChildPortToUse] =
+				&(parent->output[firstParentPortToUse + i]);
+		parent->dEdOut[i + firstParentPortToUse] = &(child->dEdIn[i
+				+ firstChildPortToUse]);
 	}
 	if (parent != &in && child != &out) {
 		NeuralNetwork *parentNetwork = static_cast<NeuralNetwork*>(parent);
@@ -91,11 +101,24 @@ void NetworkContainer::makeOrder() {
 	}
 
 }
+void NetworkContainer::updateParameters(
+		void (*updateFunction)(double &derivative, double &oldValue,
+				char *parameters)) {
+	for (int i = numOfNetworks - 1; i >= 0; i--) {
+		networks[i]->updateParameters(updateFunction);
+	}
+	this->value = 0;
+}
+void NetworkContainer::createBufferStorage(int numOfBytes) {
+	for (int i = numOfNetworks - 1; i >= 0; i--) {
+		networks[i]->createBufferStorage(numOfBytes);
+	}
+}
 void NetworkContainer::updateParameters(double alpha) {
 	for (int i = numOfNetworks - 1; i >= 0; i--) {
 		networks[i]->updateParameters(alpha);
 	}
-	this->value=0;
+	this->value = 0;
 }
 void NetworkContainer::addNeuralNetwork(NeuralNetwork *toAdd) {
 	NetSorter *s = new NetSorter(toAdd);

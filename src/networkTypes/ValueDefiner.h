@@ -5,8 +5,9 @@
  *      Author: olep
  */
 
-#ifndef VALUEDEFINER_H_
-#define VALUEDEFINER_H_
+#ifndef NETWORKTYPES_VALUEDEFINER_H_
+#define NETWORKTYPES_VALUEDEFINER_H_
+
 using namespace std;
 //#include "NetworkContainer.h"
 //class NetworkContainer;
@@ -33,6 +34,12 @@ public:
 	void updateParameters(double alpha) override{
 
 	}
+	void updateParameters(void (*updateFunction)(double &derivative,double &oldValue, char* parameters))override{
+
+	}
+	void createBufferStorage(int numOfBytes)override{
+
+	}
 	void addDerivatives() {
 		double *d = getDValueDIn();
 		for (int i = 0; i < inputs; i++) {
@@ -43,9 +50,12 @@ public:
 	void copyParameters(NeuralNetwork *const toCopy)override{
 
 	}
+	void addDerivatives(NeuralNetwork *const toCopy)override{
+
+	}
 	NetworkContainer *container;
 };
 
  /* namespace std */
 
-#endif /* VALUEDEFINER_H_ */
+#endif /* NETWORKTYPES_VALUEDEFINER_H_ */

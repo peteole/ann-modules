@@ -5,8 +5,8 @@
  *      Author: olep
  */
 
-#ifndef ERRORDEFINER_H_
-#define ERRORDEFINER_H_
+#ifndef NETWORKTYPES_ERRORDEFINER_H_
+#define NETWORKTYPES_ERRORDEFINER_H_
 #include "ValueDefiner.h"
 namespace std {
 
@@ -22,6 +22,7 @@ public:
 			ValueDefiner(channels, container) {
 		this->targetValues = &(container->evaluationParameters[firstChannelToUse]);
 		this->weights = weights;
+		firstChannelUsed=firstChannelToUse;
 	}
 	double getValue() override;
 	double* getDValueDIn() override{
@@ -42,10 +43,14 @@ public:
 	NeuralNetwork* clone(){
 		return new ErrorDefiner(inputs,container,firstChannelUsed);
 	}
+	~ErrorDefiner(){
+		delete targetValues;
+		delete weights;
+	}
 private:
 	int firstChannelUsed;
 };
 
 } /* namespace std */
 
-#endif /* ERRORDEFINER_H_ */
+#endif /* NETWORKTYPES_ERRORDEFINER_H_ */

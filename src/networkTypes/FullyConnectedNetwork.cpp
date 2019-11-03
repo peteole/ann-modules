@@ -6,8 +6,10 @@
  */
 
 #include "FullyConnectedNetwork.h"
-#include "NeuralNetwork.h"
+
 #include <iostream>
+
+//#include "../NetworkTypes/NeuralNetwork.h"
 namespace std {
 FullyConnectedNetwork::FullyConnectedNetwork(int *neuronsInLayer,
 		int numOfLayers) :
@@ -22,10 +24,14 @@ FullyConnectedNetwork::FullyConnectedNetwork(int *neuronsInLayer,
 	net = new double*[numOfLayers];
 	b = new double*[numOfLayers];
 	dEdB = new double*[numOfLayers];
+	lastBFactor = new double*[numOfLayers];
+	lastBSign = new bool*[numOfLayers];
 	for (int i = 0; i < numOfLayers; i++) {
 		net[i] = new double[neuronsInLayer[i]];
 		b[i] = new double[neuronsInLayer[i]];
 		dEdB[i] = new double[neuronsInLayer[i]];
+		lastBFactor[i] = new double[neuronsInLayer[i]];
+		lastBSign[i] = new bool[neuronsInLayer[i]];
 	}
 	w = new double**[numOfLayers - 1];
 	for (int i = 0; i < numOfLayers - 1; i++) {
@@ -35,10 +41,16 @@ FullyConnectedNetwork::FullyConnectedNetwork(int *neuronsInLayer,
 		}
 	}
 	dEdW = new double**[numOfLayers - 1];
+	lastWFactor = new double**[numOfLayers - 1];
+	lastWSign = new bool**[numOfLayers - 1];
 	for (int i = 0; i < numOfLayers - 1; i++) {
 		dEdW[i] = new double*[neuronsInLayer[i + 1]];
+		lastWFactor[i] = new double*[neuronsInLayer[i + 1]];
+		lastWSign[i] = new bool*[neuronsInLayer[i + 1]];
 		for (int j = 0; j < neuronsInLayer[i + 1]; j++) {
 			dEdW[i][j] = new double[neuronsInLayer[i]];
+			lastWFactor[i][j] = new double[neuronsInLayer[i]];
+			lastWSign[i][j] = new bool[neuronsInLayer[i]];
 		}
 	}
 	this->initializeParameters();
@@ -105,6 +117,33 @@ void FullyConnectedNetwork::updateOutput() {
 	}
 	delete[] output;
 }
+FullyConnectedNetwork::~FullyConnectedNetwork() {
+	for (int i = 0; i < numOfLayers; i++) {
+		delete net[i];
+		delete b[i];
+		delete dEdB[i];
+	}
+	for (int i = 0; i < numOfLayers - 1; i++) {
+		for (int j = 0; j < neuronsInLayer[i + 1]; j++) {
+			delete w[i][j];
+		}
+		delete w[i];
+	}
+	for (int i = 0; i < numOfLayers - 1; i++) {
+		for (int j = 0; j < neuronsInLayer[i + 1]; j++) {
+			delete dEdW[i][j];
+		}
+		delete dEdW[i];
+	}
+	delete w;
+	delete dEdW;
+	delete this->neuronsInLayer;
+	delete net;
+	delete b;
+	delete dEdB;
+}
+#define minVal 0.00000001
+#define maxVal 0.005
 void FullyConnectedNetwork::updateParameters(double alpha) {
 	if (!isOriginal) {
 		return;
@@ -112,17 +151,18 @@ void FullyConnectedNetwork::updateParameters(double alpha) {
 	for (int i = 0; i < numOfLayers - 1; i++) {
 		for (int j = 0; j < neuronsInLayer[i]; j++) {
 			for (int k = 0; k < neuronsInLayer[i + 1]; k++) {
-				w[i][k][j] += alpha * dEdW[i][k][j];
+				w[i][k][j]+=alpha*dEdW[i][k][j];
 				dEdW[i][k][j] = 0;
 			}
 		}
 	}
 	for (int i = 0; i < numOfLayers; i++) {
 		for (int j = 0; j < neuronsInLayer[i]; j++) {
-			this->b[i][j] += alpha * dEdB[i][j];
+			b[i][j]+=alpha*dEdB[i][j];
 			dEdB[i][j] = 0;
 		}
 	}
+
 }
 void FullyConnectedNetwork::addDerivatives() {
 	int neuronsInLastLayer = neuronsInLayer[numOfLayers - 1];
@@ -168,6 +208,83 @@ void FullyConnectedNetwork::copyParameters(NeuralNetwork *const toCopy) {
 	for (int i = 0; i < numOfLayers; i++) {
 		for (int j = 0; j < neuronsInLayer[i]; j++) {
 			this->b[i][j] = toUse->b[i][j];
+		}
+	}
+}
+void FullyConnectedNetwork::updateParameters(
+		void (*updateFunction)(double &derivative, double &oldValue,
+				char *parameters)) {
+	if (!isOriginal) {
+		return;
+	}
+	for (int i = 0; i < numOfLayers - 1; i++) {
+		for (int j = 0; j < neuronsInLayer[i]; j++) {
+			for (int k = 0; k < neuronsInLayer[i + 1]; k++) {
+				double &currentWeight=w[i][k][j];
+				double &currentDerivative=dEdW[i][k][j];
+				updateFunction(currentDerivative,currentWeight,updateParameter[i][k][j]);
+				currentDerivative = 0;
+			}
+		}
+	}
+	for (int i = 0; i < numOfLayers; i++) {
+		for (int j = 0; j < neuronsInLayer[i]; j++) {
+			double &currentBias=b[i][j];
+			double &currentDerivative=dEdB[i][j];
+			updateFunction(currentDerivative,currentBias,bUpdateParameter[i][j]);
+			currentDerivative = 0;
+		}
+	}
+
+}
+void FullyConnectedNetwork::createBufferStorage(int numOfBytes) {
+	if (this->updateParameter) {
+		for (int i = 0; i < numOfLayers - 1; i++) {
+			for (int j = 0; j < neuronsInLayer[i + 1]; j++) {
+				delete this->updateParameter[i][j];
+			}
+			delete this->updateParameter[i];
+		}
+		delete this->updateParameter;
+		for(int i=0;i<numOfLayers;i++){
+			delete bUpdateParameter[i];
+		}
+		delete bUpdateParameter;
+	}
+	this->updateParameter = new char***[numOfLayers - 1];
+	for (int i = 0; i < numOfLayers - 1; i++) {
+		this->updateParameter[i] = new char**[neuronsInLayer[i + 1]];
+		for (int j = 0; j < neuronsInLayer[i + 1]; j++) {
+			this->updateParameter[i][j] = new char*[neuronsInLayer[i]];
+			for(int k=0;k<neuronsInLayer[i];k++){
+				updateParameter[i][j][k]=new char[numOfBytes];
+			}
+
+		}
+	}
+	this->bUpdateParameter=new char**[numOfLayers];
+	for(int i=0;i<numOfLayers;i++){
+		bUpdateParameter[i]=new char*[neuronsInLayer[i]];
+		for(int j=0;j<neuronsInLayer[i];j++){
+			bUpdateParameter[i][j]=new char[numOfBytes];
+		}
+	}
+
+}
+void FullyConnectedNetwork::addDerivatives(NeuralNetwork *const toCopy) {
+	FullyConnectedNetwork *toUse = dynamic_cast<FullyConnectedNetwork*>(toCopy);
+	if (!toUse)
+		return;
+	for (int i = 0; i < numOfLayers - 1; i++) {
+		for (int j = 0; j < neuronsInLayer[i]; j++) {
+			for (int k = 0; k < neuronsInLayer[i + 1]; k++) {
+				dEdW[i][k][j] += toUse->dEdW[i][k][j];
+			}
+		}
+	}
+	for (int i = 0; i < numOfLayers; i++) {
+		for (int j = 0; j < neuronsInLayer[i]; j++) {
+			this->dEdB[i][j] = toUse->dEdB[i][j];
 		}
 	}
 }

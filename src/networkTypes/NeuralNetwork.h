@@ -4,11 +4,11 @@
  *  Created on: Jul 1, 2019
  *      Author: olep
  */
-#ifndef NEURALNETWORK_H_
-#define NEURALNETWORK_H_
+#ifndef NETWORKTYPES_NEURALNETWORK_H_
+#define NETWORKTYPES_NEURALNETWORK_H_
 
-#include "PlugOut.h"
 #include "PlugIn.h"
+#include "PlugOut.h"
 
 using namespace std;
 
@@ -20,11 +20,14 @@ public:
 	}
 	virtual NeuralNetwork* clone()=0;
 	virtual void copyParameters(NeuralNetwork *const toCopy)=0;
+	virtual void addDerivatives(NeuralNetwork *const toAdd)=0;
 	virtual void updateOutput()=0;
 	virtual void addDerivatives()=0;
 	virtual void updateParameters(double alpha)=0;
+	virtual void updateParameters(void (*updateFunction)(double &derivative,double &oldValue, char* parameters))=0;
+	virtual void createBufferStorage(int numOfBytes)=0;
 	virtual ~NeuralNetwork(){};
 	// ~NeuralNetwork()=0;
 };
 
-#endif /* NEURALNETWORK_H_ */
+#endif /* NETWORKTYPES_NEURALNETWORK_H_ */

@@ -5,8 +5,8 @@
  *      Author: olep
  */
 
-#ifndef PLUGIN_H_
-#define PLUGIN_H_
+#ifndef NETWORKTYPES_PLUGIN_H_
+#define NETWORKTYPES_PLUGIN_H_
 
 namespace std {
 
@@ -26,8 +26,12 @@ public:
 	double* const dEdIn;
 	double** input;
 	int inputs;
+	~PlugIn(){
+		delete dEdIn;
+		delete input;
+	}
 };
 
 } /* namespace std */
 
-#endif /* PLUGIN_H_ */
+#endif /* NETWORKTYPES_PLUGIN_H_ */
