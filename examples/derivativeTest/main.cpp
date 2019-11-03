@@ -6,14 +6,11 @@
  */
 
 #include <iostream>
-#include "NetworkContainer.h"
-#include "NeuralNetwork.h"
-#include "FullyConnectedNetwork.h"
-#include "ErrorDefiner.h"
-#include <math.h>
-
-#include "Scaler.h"
-#define channels 1
+#inclde <math.h>
+#include "networkTypes/ErrorDefiner.h"
+#include "networkTypes/FullyConnectedNetwork.h"
+#include "networkTypes/NetworkContainer.h"
+#include "networkTypes/NeuralNetwork.h"
 using namespace std;
 int main() {
 	//10 inputs, 3 outputs, therefore 3 evaluation parameters
