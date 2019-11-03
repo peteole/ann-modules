@@ -25,7 +25,12 @@ NetworkContainer::NetworkContainer(int inputs, int outputs,
 	construct(*this);
 	makeOrder();
 }
-
+NetworkContainer::NetworkContainer(int inputs, int outputs,
+		int evaluationParameters) :
+		evaluationParameters(new double[evaluationParameters]), numOfEvaluationParameters(
+				evaluationParameters), in(inputs), out(outputs), NeuralNetwork(
+				inputs, outputs) {
+}
 void NetworkContainer::updateOutput() {
 	double *target = this->in.output;
 	for (int i = 0; i < this->inputs; i++) {

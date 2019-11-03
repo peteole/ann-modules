@@ -19,6 +19,7 @@ using namespace std;
 class NetworkContainer: public NeuralNetwork {
 public:
 	NetworkContainer(int inputs, int outputs, int evaluationParameters ,void (*construct)(NetworkContainer &toConstruct));
+	NetworkContainer(int inputs, int outputs, int evaluationParameters );
 	void (*construct)(NetworkContainer &toConstruct);
 	PlugOut in;
 	PlugIn out;
