@@ -55,3 +55,5 @@ Note that the two networks really need to have an identical structure for using 
 ```cpp
 copy->addDerivatives(&container);
 ```
+## understanding the example
+In the example in this folder, the copy function is used for creating a "backup" of the current network state every time the error value decreases by 0.3. If it increases too much (by 1.0), the network parameters are reset to the backup.
