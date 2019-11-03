@@ -29,7 +29,7 @@ This is the point where the multithreading starts to take effect: Just use the t
 //use 1000 examples and 4 threads
 train(&container, trainingExamples, 1000, 4);
 ```
-Note that to use this feature, you must construct your container by giving a pointer to a construction method.
+Note that to use this feature, you must construct your container by giving a pointer to a construction method: https://github.com/peteole/ann-modules/tree/master/examples/copyingNetworkContainers
 ## updating the parameters
 This is business as usual:
 ```cpp
