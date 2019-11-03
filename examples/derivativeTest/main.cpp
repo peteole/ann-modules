@@ -6,7 +6,7 @@
  */
 
 #include <iostream>
-#inculde <math.h>
+#include <math.h>
 #include "networkTypes/ErrorDefiner.h"
 #include "networkTypes/FullyConnectedNetwork.h"
 #include "networkTypes/NetworkContainer.h"
