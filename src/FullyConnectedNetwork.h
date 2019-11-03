@@ -18,8 +18,10 @@ class FullyConnectedNetwork: public NeuralNetwork {
 public:
 	FullyConnectedNetwork(int *neuronsInLayer = new int[3] { 5, 3, 2 },
 			int numOfLayers = 3);
-	FullyConnectedNetwork(const FullyConnectedNetwork &toCopy);
+	FullyConnectedNetwork(const FullyConnectedNetwork &toCopy, bool useSameParameters=true);
+	NeuralNetwork* clone() override;
 	void updateOutput();
+	void copyParameters(NeuralNetwork *const toCopy) override;
 	~FullyConnectedNetwork() {
 	}
 	void addDerivatives();

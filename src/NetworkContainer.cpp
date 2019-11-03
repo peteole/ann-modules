@@ -14,9 +14,12 @@
 using namespace std;
 
 NetworkContainer::NetworkContainer(int inputs, int outputs,
-		int evaluationParameters) :
+		int evaluationParameters,void (*construct)(NetworkContainer &toConstruct)) :
 		evaluationParameters(new double[evaluationParameters]),numOfEvaluationParameters(evaluationParameters), in(inputs), out(
 				outputs), NeuralNetwork(inputs, outputs) {
+	this->construct=construct;
+	construct(*this);
+	makeOrder();
 }
 
 NetworkContainer::~NetworkContainer() {
@@ -46,6 +49,12 @@ void NetworkContainer::addDerivatives() {
 	for (int i = numOfNetworks - 1; i >= 0; i--) {
 		networks[i]->addDerivatives();
 	}
+}
+void NetworkContainer::applyCommitment(commitment toApply){
+	if(toApply.parentID==-1){
+		return;
+	}
+
 }
 void NetworkContainer::makeNetworkChildOf(PlugIn *child, PlugOut *parent,
 		int firstParentPortToUse,int amountOfPortsToUse, int firstChildPortToUse) {

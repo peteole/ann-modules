@@ -44,33 +44,36 @@ FullyConnectedNetwork::FullyConnectedNetwork(int *neuronsInLayer,
 	this->initializeParameters();
 }
 FullyConnectedNetwork::FullyConnectedNetwork(
-		const FullyConnectedNetwork &toCopy) :NeuralNetwork(toCopy.inputs,toCopy.outputs),
-		w(toCopy.w), b(toCopy.b), dEdW(toCopy.dEdW), dEdB(toCopy.dEdB), isOriginal(
-				false), neuronsInLayer(toCopy.neuronsInLayer), numOfLayers(
-				toCopy.numOfLayers) {
+		const FullyConnectedNetwork &toCopy, bool useSameParameters) :
+		NeuralNetwork(toCopy.inputs, toCopy.outputs), w(toCopy.w), b(toCopy.b), dEdW(
+				toCopy.dEdW), dEdB(toCopy.dEdB), isOriginal(false), neuronsInLayer(
+				toCopy.neuronsInLayer), numOfLayers(toCopy.numOfLayers) {
 	net = new double*[numOfLayers];
 	for (int i = 0; i < numOfLayers; i++) {
 		net[i] = new double[neuronsInLayer[i]];
 	}
 
 }
-void FullyConnectedNetwork::printWeights(){
-	cout<<"weights:"<<endl;
-	for(int i=0;i<numOfLayers-1;i++){
-		for(int j=0;j<neuronsInLayer[i+1];j++){
-			for(int k=0;k<neuronsInLayer[i];k++){
-				cout<<w[i][j][k]<<" ";
+NeuralNetwork* FullyConnectedNetwork::clone() {
+	return new FullyConnectedNetwork(neuronsInLayer, numOfLayers);
+}
+void FullyConnectedNetwork::printWeights() {
+	cout << "weights:" << endl;
+	for (int i = 0; i < numOfLayers - 1; i++) {
+		for (int j = 0; j < neuronsInLayer[i + 1]; j++) {
+			for (int k = 0; k < neuronsInLayer[i]; k++) {
+				cout << w[i][j][k] << " ";
 			}
-			cout<<"|";
+			cout << "|";
 		}
-		cout<<endl;
+		cout << endl;
 	}
-	cout<<"biases:"<<endl;
-	for(int i=0;i<numOfLayers;i++){
-		for(int j=0;j<neuronsInLayer[i];j++){
-			cout<<b[i][j]<<" ";
+	cout << "biases:" << endl;
+	for (int i = 0; i < numOfLayers; i++) {
+		for (int j = 0; j < neuronsInLayer[i]; j++) {
+			cout << b[i][j] << " ";
 		}
-		cout<<endl;
+		cout << endl;
 	}
 }
 void FullyConnectedNetwork::updateOutput() {
@@ -100,10 +103,10 @@ void FullyConnectedNetwork::updateOutput() {
 	for (int i = 0; i < neuronsInLayer[numOfLayers - 1]; i++) {
 		this->output[i] = output[i];
 	}
-	delete [] output;
+	delete[] output;
 }
 void FullyConnectedNetwork::updateParameters(double alpha) {
-	if(!isOriginal){
+	if (!isOriginal) {
 		return;
 	}
 	for (int i = 0; i < numOfLayers - 1; i++) {
@@ -150,5 +153,22 @@ void FullyConnectedNetwork::addDerivatives() {
 		dEdIn[i] = dEdNet[i];
 	}
 	delete[] dEdNet;
+}
+void FullyConnectedNetwork::copyParameters(NeuralNetwork *const toCopy) {
+	FullyConnectedNetwork *toUse = dynamic_cast<FullyConnectedNetwork*>(toCopy);
+	if (!toUse)
+		return;
+	for (int i = 0; i < numOfLayers - 1; i++) {
+		for (int j = 0; j < neuronsInLayer[i]; j++) {
+			for (int k = 0; k < neuronsInLayer[i + 1]; k++) {
+				w[i][k][j] = toUse->w[i][k][j];
+			}
+		}
+	}
+	for (int i = 0; i < numOfLayers; i++) {
+		for (int j = 0; j < neuronsInLayer[i]; j++) {
+			this->b[i][j] = toUse->b[i][j];
+		}
+	}
 }
 } /* namespace std */

@@ -18,6 +18,8 @@ public:
 			PlugOut(outputs), PlugIn(inputs) {
 
 	}
+	virtual NeuralNetwork* clone()=0;
+	virtual void copyParameters(NeuralNetwork *const toCopy)=0;
 	virtual void updateOutput()=0;
 	virtual void addDerivatives()=0;
 	virtual void updateParameters(double alpha)=0;

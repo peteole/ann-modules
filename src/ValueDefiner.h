@@ -40,7 +40,9 @@ public:
 		}
 		delete[] d;
 	}
-private:
+	void copyParameters(NeuralNetwork *const toCopy)override{
+
+	}
 	NetworkContainer *container;
 };
 
