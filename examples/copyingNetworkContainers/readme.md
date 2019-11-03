@@ -44,7 +44,7 @@ NetworkContainer container(10, 3, 3, constructContainer);
 This can simply be done using the clone-Function. However, you need to cast it to the specific type of network you cloned:
 ```cpp
 NetworkContainer *clone=dynamic_cast<NetworkContainer*>(container.clone());
-``
+```
 This can be done with any Neural Network as the clone mehtod is inherited from the NeuralNetwork base class.
 ## copying the parameters of a cloned network
 ```cpp
