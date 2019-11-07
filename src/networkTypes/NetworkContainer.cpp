@@ -57,12 +57,6 @@ void NetworkContainer::addDerivatives() {
 		networks[i]->addDerivatives();
 	}
 }
-void NetworkContainer::applyCommitment(commitment toApply) {
-	if (toApply.parentID == -1) {
-		return;
-	}
-
-}
 void NetworkContainer::makeNetworkChildOf(PlugIn *child, PlugOut *parent,
 		int firstParentPortToUse, int amountOfPortsToUse,
 		int firstChildPortToUse) {
