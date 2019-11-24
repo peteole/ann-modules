@@ -24,33 +24,33 @@ template<double a(double),double as(double)>FullyConnectedNetworkTemplate<a,as>:
 	net = new double*[numOfLayers];
 	b = new double*[numOfLayers];
 	dEdB = new double*[numOfLayers];
-	lastBFactor = new double*[numOfLayers];
-	lastBSign = new bool*[numOfLayers];
+	//lastBFactor = new double*[numOfLayers];
+	//lastBSign = new bool*[numOfLayers];
 	for (int i = 0; i < numOfLayers; i++) {
-		net[i] = new double[neuronsInLayer[i]];
-		b[i] = new double[neuronsInLayer[i]];
-		dEdB[i] = new double[neuronsInLayer[i]];
-		lastBFactor[i] = new double[neuronsInLayer[i]];
-		lastBSign[i] = new bool[neuronsInLayer[i]];
+		net[i] = new double[neuronsInLayer[i]]();
+		b[i] = new double[neuronsInLayer[i]]();
+		dEdB[i] = new double[neuronsInLayer[i]]();
+		//lastBFactor[i] = new double[neuronsInLayer[i]];
+		//lastBSign[i] = new bool[neuronsInLayer[i]];
 	}
 	w = new double**[numOfLayers - 1];
 	for (int i = 0; i < numOfLayers - 1; i++) {
 		w[i] = new double*[neuronsInLayer[i + 1]];
 		for (int j = 0; j < neuronsInLayer[i + 1]; j++) {
-			w[i][j] = new double[neuronsInLayer[i]];
+			w[i][j] = new double[neuronsInLayer[i]]();
 		}
 	}
 	dEdW = new double**[numOfLayers - 1];
-	lastWFactor = new double**[numOfLayers - 1];
-	lastWSign = new bool**[numOfLayers - 1];
+	//lastWFactor = new double**[numOfLayers - 1];
+	//lastWSign = new bool**[numOfLayers - 1];
 	for (int i = 0; i < numOfLayers - 1; i++) {
 		dEdW[i] = new double*[neuronsInLayer[i + 1]];
-		lastWFactor[i] = new double*[neuronsInLayer[i + 1]];
-		lastWSign[i] = new bool*[neuronsInLayer[i + 1]];
+		//lastWFactor[i] = new double*[neuronsInLayer[i + 1]];
+		//lastWSign[i] = new bool*[neuronsInLayer[i + 1]];
 		for (int j = 0; j < neuronsInLayer[i + 1]; j++) {
-			dEdW[i][j] = new double[neuronsInLayer[i]];
-			lastWFactor[i][j] = new double[neuronsInLayer[i]];
-			lastWSign[i][j] = new bool[neuronsInLayer[i]];
+			dEdW[i][j] = new double[neuronsInLayer[i]]();
+			//lastWFactor[i][j] = new double[neuronsInLayer[i]];
+			//lastWSign[i][j] = new bool[neuronsInLayer[i]];
 		}
 	}
 	this->initializeParameters();
@@ -74,7 +74,7 @@ template<double a(double),double as(double)> void FullyConnectedNetworkTemplate<
 	for (int i = 0; i < numOfLayers - 1; i++) {
 		for (int j = 0; j < neuronsInLayer[i + 1]; j++) {
 			for (int k = 0; k < neuronsInLayer[i]; k++) {
-				cout << w[i][j][k] << " ";
+				cout << w[i][j][k] << ":"<<dEdW[i][j][k]<<" ";
 			}
 			cout << "|";
 		}
@@ -83,7 +83,7 @@ template<double a(double),double as(double)> void FullyConnectedNetworkTemplate<
 	cout << "biases:" << endl;
 	for (int i = 0; i < numOfLayers; i++) {
 		for (int j = 0; j < neuronsInLayer[i]; j++) {
-			cout << b[i][j] << " ";
+			cout << b[i][j] << ":"<<dEdB[i][j]<<" ";
 		}
 		cout << endl;
 	}
@@ -152,6 +152,7 @@ template<double a(double),double as(double)> void FullyConnectedNetworkTemplate<
 		for (int j = 0; j < neuronsInLayer[i]; j++) {
 			for (int k = 0; k < neuronsInLayer[i + 1]; k++) {
 				w[i][k][j]+=alpha*dEdW[i][k][j];
+				//cout<<w[i][k][j]<<endl;
 				dEdW[i][k][j] = 0;
 			}
 		}
@@ -257,7 +258,7 @@ template<double a(double),double as(double)> void FullyConnectedNetworkTemplate<
 		for (int j = 0; j < neuronsInLayer[i + 1]; j++) {
 			this->updateParameter[i][j] = new char*[neuronsInLayer[i]];
 			for(int k=0;k<neuronsInLayer[i];k++){
-				updateParameter[i][j][k]=new char[numOfBytes];
+				updateParameter[i][j][k]=new char[numOfBytes]();
 			}
 
 		}
@@ -266,7 +267,7 @@ template<double a(double),double as(double)> void FullyConnectedNetworkTemplate<
 	for(int i=0;i<numOfLayers;i++){
 		bUpdateParameter[i]=new char*[neuronsInLayer[i]];
 		for(int j=0;j<neuronsInLayer[i];j++){
-			bUpdateParameter[i][j]=new char[numOfBytes];
+			bUpdateParameter[i][j]=new char[numOfBytes]();
 		}
 	}
 

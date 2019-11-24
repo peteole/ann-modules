@@ -11,9 +11,7 @@
 #define minVal 0.00000001
 #define maxVal 0.005
 
-int getByteLength(){
-	return sizeof(bool)+sizeof(double);
-}
+#define RPropByteAmount 9
 void RProp(double &derivative, double &oldValue,char* parameters){
 	bool &lastSign=*(reinterpret_cast<bool*>(parameters));
 	double &lastFactor=*(reinterpret_cast<double*>(parameters+1));
