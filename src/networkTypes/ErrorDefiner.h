@@ -18,15 +18,15 @@ public:
 		this->targetValues = &(container->evaluationParameters[firstChannelToUse]);
 		firstChannelUsed=firstChannelToUse;
 	}
-	ErrorDefiner(int channels, double *weights, NetworkContainer *container,int firstChannelToUse) :
+	ErrorDefiner(int channels, float *weights, NetworkContainer *container,int firstChannelToUse) :
 			ValueDefiner(channels, container) {
 		this->targetValues = &(container->evaluationParameters[firstChannelToUse]);
 		this->weights = weights;
 		firstChannelUsed=firstChannelToUse;
 	}
-	double getValue() override;
-	double* getDValueDIn() override{
-		double *d = new double[inputs];
+	float getValue() override;
+	float* getDValueDIn() override{
+		float *d = new float[inputs];
 		if (weights == 0) {
 			for (int i = 0; i < inputs; i++) {
 				d[i] = *input[i] - targetValues[i];
@@ -38,9 +38,9 @@ public:
 		}
 		return d;
 	}
-	double *targetValues;
-	double *weights = 0;
-	NeuralNetwork* clone(){
+	float *targetValues;
+	float *weights = 0;
+	NeuralNetwork* clone() override{
 		return new ErrorDefiner(inputs,container,firstChannelUsed);
 	}
 	~ErrorDefiner(){

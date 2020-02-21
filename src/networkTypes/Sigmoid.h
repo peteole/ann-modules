@@ -10,8 +10,8 @@
 
 
 #include <math.h>
-double sigmoid(double x);
-double sigmoids(double x);
+float sigmoid(float x);
+float sigmoids(float x);
 
 
 #endif /* NETWORKTYPES_SIGMOID_H_ */

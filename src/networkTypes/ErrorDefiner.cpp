@@ -8,8 +8,8 @@
 #include "ErrorDefiner.h"
 
 namespace std {
-double ErrorDefiner::getValue(){
-	double value = 0;
+float ErrorDefiner::getValue(){
+	float value = 0;
 	if (weights == 0) {
 		for (int i = 0; i < inputs; i++) {
 			value += (*input[i] - targetValues[i])
@@ -22,5 +22,9 @@ double ErrorDefiner::getValue(){
 		}
 	}
 	return value/2;
+}
+EMSCRIPTEN_BINDINGS(ErrorDefiner) {
+  class_<ErrorDefiner, base<ValueDefiner>>("ErrorDefiner")
+      .constructor<int,NetworkContainer*,int>();
 }
 } /* namespace std */

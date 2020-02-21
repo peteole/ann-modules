@@ -19,3 +19,6 @@ void ValueDefiner::updateOutput() {
 	this->container->value += this->getValue();
 }
  /* namespace std */
+EMSCRIPTEN_BINDINGS(ValueDefiner) {
+  class_<ValueDefiner, base<NeuralNetwork>>("ValueDefiner");
+}

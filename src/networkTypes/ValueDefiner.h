@@ -8,21 +8,24 @@
 #ifndef NETWORKTYPES_VALUEDEFINER_H_
 #define NETWORKTYPES_VALUEDEFINER_H_
 
-using namespace std;
+
+#include <emscripten.h>
+#include <emscripten/bind.h>
 //#include "NetworkContainer.h"
 //class NetworkContainer;
 #include "NetworkContainer.h"
+using namespace std;
 //#include "NeuralNetwork.h"
 
 class ValueDefiner: public NeuralNetwork {
 public:
 	ValueDefiner(int channels, NetworkContainer *container);
-	virtual double getValue() {
+	virtual float getValue() {
 		return 0;
 	}
-	virtual double* getDValueDIn() {
-		double *d = new double[inputs];
-		double oldValue = getValue();
+	virtual float* getDValueDIn() {
+		float *d = new float[inputs];
+		float oldValue = getValue();
 		for (int i = 0; i < inputs; i++) {
 			output[i] += 0.001;
 			d[i] = (getValue() - oldValue) / 0.001;
@@ -30,18 +33,18 @@ public:
 		}
 		return d;
 	}
-	void updateOutput();
-	void updateParameters(double alpha) override{
+	void updateOutput() override;
+	void updateParameters(float alpha) override{
 
 	}
-	void updateParameters(void (*updateFunction)(double &derivative,double &oldValue, char* parameters))override{
+	void updateParameters(void (*updateFunction)(float &derivative,float &oldValue, char* parameters))override{
 
 	}
 	void createBufferStorage(int numOfBytes)override{
 
 	}
-	void addDerivatives() {
-		double *d = getDValueDIn();
+	void addDerivatives() override{
+		float *d = getDValueDIn();
 		for (int i = 0; i < inputs; i++) {
 			dEdIn[i] = *(dEdOut[i]) + d[i];
 		}

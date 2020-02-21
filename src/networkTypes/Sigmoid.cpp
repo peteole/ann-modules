@@ -7,11 +7,11 @@
 
 #include "Sigmoid.h"
 
-double sigmoid(double x){
+float sigmoid(float x){
 	return 1 / (1 + pow(M_E, -x));
 }
-double sigmoids(double x){
-	double c=sigmoid(x);
+float sigmoids(float x){
+	float c=sigmoid(x);
 	return c*(1-c);
 }
 
